@@ -1,0 +1,6 @@
+name: DoublePlugin-1.19.2
+version: 1.0
+main: doubleplugin.DoublePlugin
+api-version: 1.19
+authors: [ RedKiller ]
+description: RedKiller`s Library
