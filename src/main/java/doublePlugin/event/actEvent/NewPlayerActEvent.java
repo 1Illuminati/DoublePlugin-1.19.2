@@ -15,29 +15,31 @@ import doublePlugin.item.ban.BanItemInfo.BanItemInfoEnum;
 import doublePlugin.properties.PropertiesEnum;
 import doublePlugin.properties.ServerProperties;
 
+import java.util.Objects;
+
 public class NewPlayerActEvent {
 	public void newPlayerInteractEvent(PlayerInteractEvent event) {
 		if(event.getHand() == EquipmentSlot.OFF_HAND) {
 			return;
 		}
-		
-		
+
+
 		NewPlayer player = NewPlayer.getNewPlayer(event.getPlayer());
 		ItemStack itemStack = player.getItemInHand();
 		if(itemStack == null || itemStack.getType() == Material.AIR) {
 			return;
 		}
-		
+
 		if(BanItem.checkBanItem(itemStack.getType())) {
 			if(BanItem.getBanitemInfo(itemStack.getType()).getAllow(BanItemInfoEnum.CLICK)) {
 				event.setCancelled(true);
 				return;
 			}
 		}
-		
+
 		Action action = event.getAction();
 		if(action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK) {
-			Material material = event.getClickedBlock().getType();
+			Material material = Objects.requireNonNull(event.getClickedBlock()).getType();
 			if(BanItem.checkBanItem(material)) {
 				if(BanItem.getBanitemInfo(material).getAllow(BanItemInfoEnum.CLICK)) {
 					event.setCancelled(true);
@@ -48,7 +50,7 @@ public class NewPlayerActEvent {
 
 		ItemEvent itemEvent = ItemEvent.getItemEvent(itemStack);
 		if(itemEvent != null) {
-			Boolean eventCancelled = false;
+			boolean eventCancelled = false;
 			switch(action) {
 				case LEFT_CLICK_AIR:
 				case LEFT_CLICK_BLOCK:
@@ -57,7 +59,7 @@ public class NewPlayerActEvent {
 					} else {
 						eventCancelled = itemEvent.leftClick(player);
 					}
-				break;
+					break;
 				case RIGHT_CLICK_AIR:
 				case RIGHT_CLICK_BLOCK:
 					if(player.isSneaking()) {
@@ -65,9 +67,9 @@ public class NewPlayerActEvent {
 					} else {
 						eventCancelled = itemEvent.rightClick(player);
 					}
-				break;
+					break;
 				default:
-				break;
+					break;
 			}
 
 			event.setCancelled(eventCancelled);
@@ -81,7 +83,7 @@ public class NewPlayerActEvent {
 		if(itemStack == null || itemStack.getType() == Material.AIR) {
 			return;
 		}
-		
+
 		if(!ServerProperties.get(PropertiesEnum.LEFT)) {
 			event.setCancelled(true);
 			return;
@@ -89,7 +91,7 @@ public class NewPlayerActEvent {
 
 		ItemEvent itemEvent = ItemEvent.getItemEvent(itemStack);
 		if(itemEvent != null) {
-			Boolean eventCancelled = false;
+			boolean eventCancelled;
 			if(player.isSneaking()) {
 				eventCancelled = itemEvent.shiftSwapHand(player);
 			} else {
@@ -105,12 +107,12 @@ public class NewPlayerActEvent {
 		if(itemStack == null || itemStack.getType() == Material.AIR) {
 			return;
 		}
-		
+
 		if(!ServerProperties.get(PropertiesEnum.DROP)) {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		if(BanItem.getBanitemInfo(itemStack.getType()).getAllow(BanItemInfoEnum.DROP)) {
 			event.setCancelled(true);
 			return;
@@ -118,7 +120,7 @@ public class NewPlayerActEvent {
 
 		ItemEvent itemEvent = ItemEvent.getItemEvent(itemStack);
 		if(itemEvent != null) {
-			Boolean eventCancelled = false;
+			boolean eventCancelled;
 			if(player.isSneaking()) {
 				eventCancelled = itemEvent.dropItem(player);
 			} else {

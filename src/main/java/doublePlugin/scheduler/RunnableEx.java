@@ -6,7 +6,7 @@ public abstract class RunnableEx implements Runnable {
 	private int taskId;
 	private int repeat = Integer.MAX_VALUE;
 	private int count;
-	
+
 	public int getTaskId() {
 		return taskId;
 	}
@@ -14,7 +14,7 @@ public abstract class RunnableEx implements Runnable {
 	public void setTaskId(int taskId) {
 		this.taskId = taskId;
 	}
-	
+
 	public int getRepeat() {
 		return repeat;
 	}
@@ -22,7 +22,7 @@ public abstract class RunnableEx implements Runnable {
 	public void setRepeat(int repeat) {
 		this.repeat = repeat;
 	}
-	
+
 	public int getCount() {
 		return this.count;
 	}
@@ -32,13 +32,13 @@ public abstract class RunnableEx implements Runnable {
 		if(this.repeat <= this.count) {
 			stop();
 		}
-		
+
 		function();
 		this.count++;
 	}
-	
+
 	public abstract void function();
-	
+
 	public void stop() {
 		Bukkit.getScheduler().cancelTask(this.taskId);
 	}

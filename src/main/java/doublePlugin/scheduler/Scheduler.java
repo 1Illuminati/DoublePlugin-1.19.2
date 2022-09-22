@@ -9,12 +9,12 @@ public class Scheduler {
 	public static void delayScheduler(final RunnableEx task, int startDelayTick) {
 		task.setTaskId(Bukkit.getScheduler().scheduleSyncDelayedTask(DoublePlugin.plugin, task, startDelayTick));
 	}
-	
+
 	//일정시간마다 반복
 	public static void repeatDelayScheduler(final RunnableEx task, int delayTick, int repeat) {
 		repeatDelayScheduler(task, 0, delayTick, repeat);
 	}
-	
+
 	//일정시간뒤에 일정시간마다 반복
 	public static void repeatDelayScheduler(final RunnableEx task, int startDelayTick, int delayTick, int repeat) {
 		task.setRepeat(repeat);

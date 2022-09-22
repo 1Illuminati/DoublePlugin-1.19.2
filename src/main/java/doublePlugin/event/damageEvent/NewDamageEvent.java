@@ -15,14 +15,14 @@ public class NewDamageEvent {
 		boolean check2 = false;
 		if (event.getDamager() instanceof Player) {
 			NewPlayer atkPlayer = NewPlayer.getNewPlayer((Player) event.getDamager());
-			check1 = !check1;
+			check1 = true;
 			atkPlayer.setCoolTimeSecond(NewPlayer.PLAYER_HIT_NUM, 3);
 			atkPlayer.addAtkNum();
 		}
 
 		if (event.getEntity() instanceof Player) {
 			NewPlayer defPlayer = NewPlayer.getNewPlayer((Player) event.getEntity());
-			check2 = !check2;
+			check2 = true;
 			defPlayer.setCoolTimeSecond(NewPlayer.PLAYER_BEAT_NUM, 3);
 			defPlayer.addDefNum();
 		}
@@ -32,10 +32,10 @@ public class NewDamageEvent {
 			}
 		}
 	}
-	
+
 	public void newEntityDamageEvent(EntityDamageEvent event) {
-		boolean check = ServerProperties.get(PropertiesEnum.FALLDAMAGE);
-		
+		boolean check = ServerProperties.get(PropertiesEnum.FALL_DAMAGE);
+
 		if (!check) {
 			if (event.getCause() == DamageCause.FALL) {
 				event.setCancelled(true);

@@ -12,61 +12,63 @@ import doublePlugin.scheduler.Scheduler;
 import doublePlugin.util.scoreBoard.ScoreBoardHelper;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.inventory.Inventory;
 
 public class NewPlayer extends NewPlayerObject {
-	private static final HashMap<UUID, NewPlayer> newPlayerMap = new HashMap<>();
-	private static final HashMap<UUID, NewPlayer> npcNewPlayerMap = new HashMap<>();
-    
+    private static final HashMap<UUID, NewPlayer> newPlayerMap = new HashMap<>();
+    private static final HashMap<UUID, NewPlayer> npcNewPlayerMap = new HashMap<>();
+
     public static final String PLAYER_HIT_NUM = "DOUBLE_PLUGIN_PLAYER_HIT_NUM";
     public static final String PLAYER_BEAT_NUM = "DOUBLE_PLUGIN_PLAYER_BEAT_NUM";
     public static final String PLAYER_JOIN_COUNT = "DOUBLE_PLUGIN_PLAYER_JOIN_COUNT";
     public static final String PLAYER_CONNECT = "DOUBLE_PLUGIN_PLAYER_CONNECT";
     public static final String NPC = "NPC";
-    
+
     private final HashMap<String, Runnable> runnableMap = new HashMap<>();
     private final NewOfflinePlayer newOfflinePlayer;
     private int atkNum;
     private int defNum;
-    private ScoreBoardHelper scordBoard;
+    private ScoreBoardHelper scoreBoard;
     private final boolean npcPlayer;
+    private ScanRunnable scanRunnable;
 
     protected NewPlayer(Player player) {
-    	super(player);
+        super(player);
         this.atkNum = 0;
         this.defNum = 0;
-        
+
         if(!player.hasMetadata(NewPlayer.NPC)) {
-        	npcPlayer = true;
-        	newOfflinePlayer = null;
+            npcPlayer = true;
+            newOfflinePlayer = null;
         } else {
-        	npcPlayer = false;
-        	newOfflinePlayer = NewOfflinePlayer.getNewOfflinePlayer(getUniqueId());
+            npcPlayer = false;
+            newOfflinePlayer = NewOfflinePlayer.getNewOfflinePlayer(getUniqueId());
         }
-        
-        loadIndividualSchedular();
+
+        loadIndividualScheduler();
     }
 
-    private void loadIndividualSchedular() {
+    private void loadIndividualScheduler() {
         Scheduler.infiniteRepeatScheduler(new RunnableEx() {
 
-			@Override
-			public void function() {
-				if (checkCoolTime(NewPlayer.PLAYER_HIT_NUM))
-	                atkNum = 0;
+            @Override
+            public void function() {
+                if (checkCoolTime(NewPlayer.PLAYER_HIT_NUM))
+                    atkNum = 0;
 
-	            if (checkCoolTime(NewPlayer.PLAYER_BEAT_NUM))
-	                defNum = 0;
-	            
-	            for(Runnable runnable : runnableMap.values()) {
-	            	runnable.run();
-	            }
-	            
-	            if(!getPlayerConnect()) {
-	            	removeNewPlayer();
-	            	this.stop();
-	            }
-			}
-            
+                if (checkCoolTime(NewPlayer.PLAYER_BEAT_NUM))
+                    defNum = 0;
+
+                for(Runnable runnable : runnableMap.values()) {
+                    runnable.run();
+                }
+
+                if(!getPlayerConnect()) {
+                    removeNewPlayer();
+                    this.stop();
+                }
+            }
+
         }, 0, 1);
     }
 
@@ -92,48 +94,48 @@ public class NewPlayer extends NewPlayerObject {
         UUID playerUUID = player.getUniqueId();
 
         if(player.hasMetadata(NewPlayer.NPC)) {
-        	if(!npcNewPlayerMap.containsKey(playerUUID)) {
-        		npcNewPlayerMap.put(playerUUID, new NewPlayer(player));
-        	}
-        	
-        	return npcNewPlayerMap.get(playerUUID);
+            if(!npcNewPlayerMap.containsKey(playerUUID)) {
+                npcNewPlayerMap.put(playerUUID, new NewPlayer(player));
+            }
+
+            return npcNewPlayerMap.get(playerUUID);
         } else if(!newPlayerMap.containsKey(playerUUID)) {
             newPlayerMap.put(playerUUID, new NewPlayer(player));
         }
 
         return newPlayerMap.get(playerUUID);
     }
-    
+
     public static boolean containsNewPlayer(Player player) {
-    	return newPlayerMap.containsKey(player.getUniqueId());
+        return newPlayerMap.containsKey(player.getUniqueId());
     }
-    
+
     public boolean checkPlayerNpc() {
-    	return this.npcPlayer;
+        return this.npcPlayer;
     }
-    
+
     /**
-     * npc플레이어 일경우 null로 반환한다
+     * npc플레이어 일경우 null 반환한다
      * @return null or NewOfflinePlayer
      */
     public NewOfflinePlayer getNewOfflinePlayer() {
-    	return this.newOfflinePlayer;
+        return this.newOfflinePlayer;
     }
-    
+
     public ScoreBoardHelper getScoreBoardHelper() {
-    	return this.scordBoard;
+        return this.scoreBoard;
     }
-    
+
     public void setScoreBoardHelper(ScoreBoardHelper scoreBoardHelper) {
-    	this.scordBoard = scoreBoardHelper;
+        this.scoreBoard = scoreBoardHelper;
     }
-    
+
     public void putRunnable(String code, final Runnable run) {
-    	this.runnableMap.put(code, run);
+        this.runnableMap.put(code, run);
     }
-    
+
     public Runnable getRunnable(String code) {
-    	return this.runnableMap.get(code);
+        return this.runnableMap.get(code);
     }
 
     public void removeNewPlayer() {
@@ -142,7 +144,7 @@ public class NewPlayer extends NewPlayerObject {
             newPlayerMap.remove(playerUUID);
         }
     }
-    
+
     public int getAtkNum() {
         return this.atkNum;
     }
@@ -182,20 +184,48 @@ public class NewPlayer extends NewPlayerObject {
     public String getUniqueIdtoString() {
         return player.getUniqueId().toString();
     }
-    
-    public NewPlayer getNewPlayer() {
-    	return this;
+
+    /**
+     * 인벤토리를 열고 있는 상태에서 인벤토리를 오픈할때 사용해야하며 기존의 close 이벤트를 거치지 않고 인벤토리를 오픈한다
+     * @param inv 약간 늦게 오픈할 인벤토리
+     */
+    public void openInvNotClose(Inventory inv) {
+        Scheduler.delayScheduler(new RunnableEx() {
+
+            @Override
+            public void function() {
+                player.openInventory(inv);
+            }
+        }, 2);
     }
-    
+
+    public void scannerPlayer(final ScanRunnable runnable) {
+        this.scanRunnable = runnable;
+    }
+
+    public ScanRunnable getScannerRunnable() {
+        return this.scanRunnable;
+    }
+
+    public static class ScanRunnable {
+        public void run(String str) {
+
+        }
+    }
+
+    public NewPlayer getNewPlayer() {
+        return this;
+    }
+
     /**
      * 플레이어의 접속 여부를 확인한다 대체 어디다가 쓸려고?
      * @return true 접속중 false 나감
      */
     public boolean getPlayerConnect() {
-    	return super.getBooleanValue(PLAYER_CONNECT);
+        return super.getBooleanValue(PLAYER_CONNECT);
     }
-    
+
     public int getPlayerJoinCount() {
-    	return super.getIntegerValue(PLAYER_JOIN_COUNT);
+        return super.getIntegerValue(PLAYER_JOIN_COUNT);
     }
 }

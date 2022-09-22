@@ -21,10 +21,10 @@ public class StartItemInv extends InventoryManager {
 	public static final String INV_CODE = DoublePlugin.pluginName + " Start Item";
 	private static final List<ItemStack> startItemList = new ArrayList<>();
 
-	public static void openInv(NewPlayer player) {
-		player.openInventory(InventoryManager.getInventoryEvent(INV_CODE).getInv(player));
+	public static Inventory getInventory(NewPlayer player) {
+		return InventoryManager.getInventoryEvent(INV_CODE).getInv(player);
 	}
-	
+
 	public static List<ItemStack> getStartItem() {
 		return startItemList;
 	}
@@ -33,7 +33,7 @@ public class StartItemInv extends InventoryManager {
 	public void open(InventoryOpenEvent event) {}
 
 	@Override
-	public void click(InventoryClickEvent event) {}  
+	public void click(InventoryClickEvent event) {}
 
 	@Override
 	public void close(InventoryCloseEvent event) {
@@ -46,8 +46,9 @@ public class StartItemInv extends InventoryManager {
 				startItemList.add(item);
 			}
 		}
-		
-		PropertiesInv.openInv(NewPlayer.getNewPlayer((Player) event.getPlayer()));
+
+		NewPlayer player = NewPlayer.getNewPlayer((Player) event.getPlayer());
+		player.openInvNotClose(PropertiesInv.getInventory(player));
 	}
 
 	@Override
@@ -64,7 +65,7 @@ public class StartItemInv extends InventoryManager {
 				invMaker.setItem(i, infoMaps.getItemStackValue(INV_CODE + i));
 			}
 		}
-		
+
 		return invMaker.getInv();
 	}
 }

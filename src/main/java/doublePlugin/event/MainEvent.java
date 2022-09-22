@@ -1,15 +1,13 @@
 package doublePlugin.event;
 
+import doublePlugin.event.chatEvent.NewPlayerChatEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.entity.EntityBreedEvent;
+import org.bukkit.event.player.*;
 import org.spigotmc.event.entity.EntityMountEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -33,11 +31,12 @@ public class MainEvent implements Listener {
     private final NewInventoryEvent newInventoryEvent = new NewInventoryEvent();
     private final NewBlockEvent newBlockEvent = new NewBlockEvent();
     private final NewEntityEvent newEntityEvent = new NewEntityEvent();
-    
-    
+    private final NewPlayerChatEvent newPlayerChatEvent = new NewPlayerChatEvent();
+
+
     @EventHandler
     public void entityDamageByEntityEvent(EntityDamageByEntityEvent e) {
-    	newDamageEvent.newEntityDamageByEntityEvent(e);
+        newDamageEvent.newEntityDamageByEntityEvent(e);
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -49,63 +48,73 @@ public class MainEvent implements Listener {
     public void playerQuitEvent(PlayerQuitEvent e) {
         newPlayerJoinAndQuitEvent.NewPlayerQuitEvent(e);
     }
-    
+
     @EventHandler
     public void playerInteractEvent(PlayerInteractEvent e) {
-    	this.newPlayerActEvent.newPlayerInteractEvent(e);
+        this.newPlayerActEvent.newPlayerInteractEvent(e);
     }
 
     @EventHandler
     public void playerDropItemEvent(PlayerDropItemEvent e) {
-    	this.newPlayerActEvent.newPlayerDropItemEvent(e);
+        this.newPlayerActEvent.newPlayerDropItemEvent(e);
     }
 
     @EventHandler
     public void playerSwapHandItemsEvent(PlayerSwapHandItemsEvent e) {
-    	this.newPlayerActEvent.newPlayerSwapHandItemsEvent(e);
+        this.newPlayerActEvent.newPlayerSwapHandItemsEvent(e);
     }
 
     @EventHandler
     public void inventoryClickEvent(InventoryClickEvent e) {
-    	this.newInventoryEvent.newInventoryClickEvent(e);
+        this.newInventoryEvent.newInventoryClickEvent(e);
     }
 
     @EventHandler
     public void inventoryCloseEvent(InventoryCloseEvent e) {
-    	this.newInventoryEvent.newInventoryCloseEvent(e);
+        this.newInventoryEvent.newInventoryCloseEvent(e);
     }
 
     @EventHandler
     public void inventoryOpenEvent(InventoryOpenEvent e) {
-    	this.newInventoryEvent.newInventoryOpenEvent(e);
+        this.newInventoryEvent.newInventoryOpenEvent(e);
     }
-    
+
     @EventHandler
     public void blockBreakEvent(BlockBreakEvent e) {
-    	this.newBlockEvent.newBlockBreakEvent(e);
+        this.newBlockEvent.newBlockBreakEvent(e);
     }
-    
+
     @EventHandler
     public void blockPlaceEvent(BlockPlaceEvent e) {
-    	this.newBlockEvent.newBlockPlaceEvent(e);
+        this.newBlockEvent.newBlockPlaceEvent(e);
     }
 
     @EventHandler
     public void entityMountEvent(EntityMountEvent e) {
-    	this.newEntityEvent.newEntityMountEvent(e);
+        this.newEntityEvent.newEntityMountEvent(e);
     }
     @EventHandler
     public void craftItemEvent(CraftItemEvent e) {
-    	this.newInventoryEvent.newCraftItemEvent(e);
+        this.newInventoryEvent.newCraftItemEvent(e);
     }
-    
+
     @EventHandler
     public void entityDamageEvent(EntityDamageEvent e) {
-    	this.newDamageEvent.newEntityDamageEvent(e);
+        this.newDamageEvent.newEntityDamageEvent(e);
     }
-    
+
     @EventHandler
     public void foodLevelChangeEvent(FoodLevelChangeEvent e) {
-    	this.newEntityEvent.newFoodLevelChangeEvent(e);
+        this.newEntityEvent.newFoodLevelChangeEvent(e);
+    }
+
+    @EventHandler
+    public void entityBreedEvent(EntityBreedEvent e) {
+        this.newEntityEvent.newEntityBreedEvent(e);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void asyncPlayerChatEvent(AsyncPlayerChatEvent e) {
+        this.newPlayerChatEvent.newAsyncPlayerChatEvent(e);
     }
 }

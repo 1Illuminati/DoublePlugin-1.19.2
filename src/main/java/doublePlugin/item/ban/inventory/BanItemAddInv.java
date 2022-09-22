@@ -19,16 +19,16 @@ import doublePlugin.util.map.NotNullStrMap;
 
 public class BanItemAddInv extends InventoryManager {
 	public static final String INV_CODE = DoublePlugin.pluginName + " Ban Item Register";
-	
-	public static void openInv(NewPlayer player) {
-		player.openInventory(InventoryManager.getInventoryEvent(INV_CODE).getInv(player));
+
+	public static Inventory getInventory(NewPlayer player) {
+		return InventoryManager.getInventoryEvent(INV_CODE).getInv(player);
 	}
 
 	@Override
 	public void open(InventoryOpenEvent event) {}
 
 	@Override
-	public void click(InventoryClickEvent event) {}  
+	public void click(InventoryClickEvent event) {}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -45,8 +45,9 @@ public class BanItemAddInv extends InventoryManager {
 				}
 			}
 		}
-		
-		PropertiesInv.openInv(NewPlayer.getNewPlayer((Player) event.getPlayer()));
+
+		NewPlayer player = NewPlayer.getNewPlayer((Player) event.getPlayer());
+		player.openInvNotClose(PropertiesInv.getInventory(player));
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class BanItemAddInv extends InventoryManager {
 		for(BanItemInfo banItemInfo : BanItem.getList()) {
 			invMaker.setItem(index++, new ItemStack(banItemInfo.getMaterial()));
 		}
-		
+
 		return invMaker.getInv();
 	}
 }

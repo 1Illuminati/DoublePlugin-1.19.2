@@ -16,11 +16,11 @@ import org.bukkit.scoreboard.Team;
  *
  */
 public class ScoreBoardHelper {
-    private Scoreboard scoreboard;
-    private Objective sidebar;
+    private final Scoreboard scoreboard;
+    private final Objective sidebar;
 
     @SuppressWarnings("deprecation")
-	public ScoreBoardHelper(Player player) {
+    public ScoreBoardHelper(Player player) {
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         sidebar = scoreboard.registerNewObjective("sidebar", "dummy");
         sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -60,7 +60,7 @@ public class ScoreBoardHelper {
         while(list.size()>15) {
             list.remove(list.size()-1);
         }
-       
+
         int slot = list.size();
 
         if(slot<15) {

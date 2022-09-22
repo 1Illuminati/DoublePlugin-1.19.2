@@ -12,7 +12,7 @@ import doublePlugin.entity.player.NewPlayer;
 
 public abstract class InventoryManager {
     public final static HashMap<String, InventoryManager> inventoryMap = new HashMap<>();
-    
+
     public static InventoryManager getInventoryEvent(InventoryView invView) {
         for(InventoryManager inventoryEvent : inventoryMap.values()) {
             if(inventoryEvent.checkInventory(invView)) {
@@ -22,26 +22,26 @@ public abstract class InventoryManager {
 
         return null;
     }
-    
+
     public static InventoryManager getInventoryEvent(String code) {
-    	return inventoryMap.get(code);
+        return inventoryMap.get(code);
     }
-    
+
     public InventoryManager() {
-    	inventoryMap.put(getCode(), this);
+        inventoryMap.put(getCode(), this);
     }
-    
+
     public boolean checkInventory(InventoryView invView) {
-    	return invView.getTitle().equals(getCode());
+        return invView.getTitle().equals(getCode());
     }
-    
+
     public abstract String getCode();
-    
+
     public abstract Inventory getInv(NewPlayer player);
 
     public abstract void open(InventoryOpenEvent event);
 
     public abstract void click(InventoryClickEvent event);
-    
+
     public abstract void close(InventoryCloseEvent event);
 }

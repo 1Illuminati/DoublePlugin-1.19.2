@@ -22,31 +22,31 @@ public class InfoMaps {
     private static final JsonReadWrite jsonReadWrite = new JsonReadWrite();
     private static final BukkitClassToStr bukkitClassToStr = new BukkitClassToStr();
     private static final Folder folder = new Folder();
-    
+
     private NotNullStrMap<Integer> integerMap;
     private NotNullStrMap<Double> doubleMap;
     private NotNullStrMap<Long> longMap;
     private NotNullStrMap<String> stringMap;
-    private NotNullStrMap<Boolean> booleanMap; 
+    private NotNullStrMap<Boolean> booleanMap;
     private NotNullStrMap<ItemStack> itemStackMap;
     private NotNullStrMap<Inventory> inventoryMap;
     private NotNullStrMap<Location> locationMap;
     private final String locationFolder;
-    
+
     private final CoolTime coolTime;
 
     protected InfoMaps(String locationFolder) {
-    	folder.folder(locationFolder);
-    	this.locationFolder = locationFolder;
-    	integerMap = getMap("integer", Integer.class);
-    	doubleMap = getMap("double", Double.class);
-    	longMap = getMap("long", Long.class);
-    	stringMap = getMap("string", String.class);   	
-    	booleanMap = getMap("boolean", Boolean.class);  	
-    	itemStackMap = InfoMaps.bukkitClassToStr.bukkitObjInMap(getMap("itemStack", String.class), ItemStack.class);       	
-    	inventoryMap = InfoMaps.bukkitClassToStr.bukkitObjInMap(getMap("inventory", String.class), Inventory.class);    
-    	locationMap = InfoMaps.bukkitClassToStr.bukkitObjInMap(getMap("location", String.class), Location.class);
-    	DoublePlugin.sendLog(locationFolder + "`s infoMaps load");
+        folder.mkdir(locationFolder);
+        this.locationFolder = locationFolder;
+        integerMap = getMap("integer", Integer.class);
+        doubleMap = getMap("double", Double.class);
+        longMap = getMap("long", Long.class);
+        stringMap = getMap("string", String.class);
+        booleanMap = getMap("boolean", Boolean.class);
+        itemStackMap = InfoMaps.bukkitClassToStr.bukkitObjInMap(getMap("itemStack", String.class), ItemStack.class);
+        inventoryMap = InfoMaps.bukkitClassToStr.bukkitObjInMap(getMap("inventory", String.class), Inventory.class);
+        locationMap = InfoMaps.bukkitClassToStr.bukkitObjInMap(getMap("location", String.class), Location.class);
+        DoublePlugin.sendLog(locationFolder + "`s infoMaps load");
 
         this.integerMap.setNormalValue(0);
         this.doubleMap.setNormalValue(0.0);
@@ -58,25 +58,25 @@ public class InfoMaps {
         this.locationMap.setNormalValue(new Location(Bukkit.getWorld("world"), 0, 0, 0));
         this.coolTime = new CoolTime(this);
     }
-    
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	private <T> NotNullStrMap<T> getMap(String folder, Class clazz) {
-    	try {
-    		return InfoMaps.jsonReadWrite.jsonRead(locationFolder + "/" + folder, clazz);
-		} catch (IOException e) {
-			DoublePlugin.sendLog(folder + " null");
-			return new NotNullStrMap<T>();
-		}
+    private <T> NotNullStrMap<T> getMap(String folder, Class clazz) {
+        try {
+            return InfoMaps.jsonReadWrite.jsonRead(locationFolder + "/" + folder, clazz);
+        } catch (IOException e) {
+            DoublePlugin.sendLog(folder + " null");
+            return new NotNullStrMap<T>();
+        }
     }
-    
+
     public CoolTime getCoolTime() {
-		return this.coolTime;
-	}
+        return this.coolTime;
+    }
 
     public void saveInfoMaps() {
         try {
-        	InfoMaps.jsonReadWrite.jsonWrite(locationFolder + "/integer", this.getIntegerMap());
-        	InfoMaps.jsonReadWrite.jsonWrite(locationFolder + "/double", this.getDoubleMap());
+            InfoMaps.jsonReadWrite.jsonWrite(locationFolder + "/integer", this.getIntegerMap());
+            InfoMaps.jsonReadWrite.jsonWrite(locationFolder + "/double", this.getDoubleMap());
             InfoMaps.jsonReadWrite.jsonWrite(locationFolder + "/long", this.getLongMap());
             InfoMaps.jsonReadWrite.jsonWrite(locationFolder + "/string", this.getStringMap());
             InfoMaps.jsonReadWrite.jsonWrite(locationFolder + "/boolean", this.getBooleanMap());
@@ -84,26 +84,26 @@ public class InfoMaps {
             InfoMaps.jsonReadWrite.jsonWrite(locationFolder + "/inventory", InfoMaps.bukkitClassToStr.bukkitObjOutMap(this.getInventoryMap()));
             InfoMaps.jsonReadWrite.jsonWrite(locationFolder + "/location", InfoMaps.bukkitClassToStr.bukkitObjOutMap(this.getLocationMap()));
             DoublePlugin.sendLog(locationFolder + "`s infoMaps save");
-		} catch (IOException e) {
-			DoublePlugin.sendLog("§4" + e.getClass().getName() + " 발생");
-		}
+        } catch (IOException e) {
+            DoublePlugin.sendLog("§4" + e.getClass().getName() + " 발생");
+        }
     }
-    
+
     public String getFileLoc() {
-    	return this.locationFolder;
+        return this.locationFolder;
     }
-    
+
     public void copy(InfoMaps infoMaps) {
-    	this.integerMap = infoMaps.integerMap;
-    	this.booleanMap = infoMaps.booleanMap;
-    	this.inventoryMap = infoMaps.inventoryMap;
-    	this.locationMap = infoMaps.locationMap;
-    	this.longMap = infoMaps.longMap;
-    	this.itemStackMap = infoMaps.itemStackMap;
-    	this.doubleMap = infoMaps.doubleMap;
-    	this.stringMap = infoMaps.stringMap;
+        this.integerMap = infoMaps.integerMap;
+        this.booleanMap = infoMaps.booleanMap;
+        this.inventoryMap = infoMaps.inventoryMap;
+        this.locationMap = infoMaps.locationMap;
+        this.longMap = infoMaps.longMap;
+        this.itemStackMap = infoMaps.itemStackMap;
+        this.doubleMap = infoMaps.doubleMap;
+        this.stringMap = infoMaps.stringMap;
     }
-    
+
     /**
      * integer
      */
@@ -138,7 +138,7 @@ public class InfoMaps {
     public Collection<Integer> getIntegerValues() {
         return integerMap.values();
     }
-    
+
     /**
      * double
      */
@@ -173,7 +173,7 @@ public class InfoMaps {
     public Collection<Double> getDoubleValues() {
         return doubleMap.values();
     }
-    
+
     /**
      * long
      */
@@ -208,7 +208,7 @@ public class InfoMaps {
     public Collection<Long> getLongValues() {
         return longMap.values();
     }
-    
+
     /**
      * string
      */
@@ -243,7 +243,7 @@ public class InfoMaps {
     public Collection<String> getStringValues() {
         return stringMap.values();
     }
-    
+
     /**
      * boolean
      */
@@ -275,7 +275,7 @@ public class InfoMaps {
         return booleanMap.values();
     }
 
-    
+
     /**
      * itemStack
      */
@@ -306,14 +306,14 @@ public class InfoMaps {
     public Collection<ItemStack> getItemStackValues() {
         return itemStackMap.values();
     }
-    
+
     /**
      * inventory
      */
     public NotNullStrMap<Inventory> getInventoryMap() {
         return inventoryMap;
     }
-    
+
     public Inventory getInventoryValue(String key) {
         return inventoryMap.get(key);
     }
@@ -337,14 +337,14 @@ public class InfoMaps {
     public Collection<Inventory> getInventoryValues() {
         return inventoryMap.values();
     }
-    
+
     /**
      * location
      */
     public NotNullStrMap<Location> getLocationMap() {
         return locationMap;
     }
-    
+
     public Location getLocationValue(String key) {
         return locationMap.get(key);
     }

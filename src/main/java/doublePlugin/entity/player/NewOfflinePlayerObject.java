@@ -11,12 +11,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class NewOfflinePlayerObject extends PlayerInfoObject {
-    protected OfflinePlayer offlineplayer;
+	protected OfflinePlayer offlineplayer;
 
-    protected NewOfflinePlayerObject(OfflinePlayer offlineplayer) {
-    	super(offlineplayer.getUniqueId());
-        this.offlineplayer = offlineplayer;
-    }
+	protected NewOfflinePlayerObject(OfflinePlayer offlineplayer) {
+		super(offlineplayer.getUniqueId());
+		this.offlineplayer = offlineplayer;
+	}
 
 	public void decrementStatistic(Statistic arg0, EntityType arg1, int arg2) {
 		offlineplayer.decrementStatistic(arg0, arg1, arg2);
@@ -146,5 +146,5 @@ public class NewOfflinePlayerObject extends PlayerInfoObject {
 		offlineplayer.setWhitelisted(arg0);
 	}
 
-    
+
 }

@@ -2,6 +2,7 @@ package doublePlugin.item.ban.inventory;
 
 import java.util.Arrays;
 
+import doublePlugin.properties.PropertiesInv;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -21,11 +22,11 @@ import doublePlugin.item.ban.BanItemInfo.BanItemInfoEnum;
 
 public class BanItemInfoInv extends InventoryManager {
 	public static final String INV_CODE = DoublePlugin.pluginName + " Ban Item Info";
-	
-	public static void openInv(NewPlayer player) {
-		player.openInventory(InventoryManager.getInventoryEvent(INV_CODE).getInv(player));
+
+	public static Inventory getInventory(NewPlayer player) {
+		return InventoryManager.getInventoryEvent(INV_CODE).getInv(player);
 	}
-	
+
 	private ItemStack temp(BanItemInfo banItemInfo) {
 		return new ItemBuilder(banItemInfo.getMaterial()).setLore(Arrays.asList(
 				temp2(banItemInfo, BanItemInfoEnum.CRAFT),
@@ -35,14 +36,14 @@ public class BanItemInfoInv extends InventoryManager {
 				temp2(banItemInfo, BanItemInfoEnum.CLICK),
 				temp2(banItemInfo, BanItemInfoEnum.DROP))).make();
 	}
-	
+
 	private static String temp2(BanItemInfo banItemInfo, BanItemInfoEnum infoEnum) {
 		return "§f" + infoEnum.name() + " : " + (banItemInfo.getAllow(infoEnum) ? "§4불가" : "§2허용");
 	}
 
 	@Override
 	public void open(InventoryOpenEvent event) {
-	
+
 	}
 
 	@Override
@@ -51,7 +52,7 @@ public class BanItemInfoInv extends InventoryManager {
 		if(itemStack == null || itemStack.getType() == Material.AIR) {
 			return;
 		}
-		
+
 		if(BanItem.checkBanItem(itemStack.getType())) {
 			NewPlayer player = NewPlayer.getNewPlayer((Player) event.getWhoClicked());
 			player.setStringValue(BanItemMoreInfoInv.INV_CODE, itemStack.getType().name());
@@ -62,6 +63,8 @@ public class BanItemInfoInv extends InventoryManager {
 
 	@Override
 	public void close(InventoryCloseEvent event) {
+		NewPlayer player = NewPlayer.getNewPlayer((Player) event.getPlayer());
+		player.openInvNotClose(PropertiesInv.getInventory(player));
 	}
 
 	@Override
@@ -72,11 +75,11 @@ public class BanItemInfoInv extends InventoryManager {
 	@Override
 	public Inventory getInv(NewPlayer player) {
 		InventoryMaker invMaker = new InventoryMaker(54, INV_CODE);
-		int index = 0;  
+		int index = 0;
 		for(BanItemInfo banItemInfo : BanItem.getList()) {
 			invMaker.setItem(index++, temp(banItemInfo));
 		}
-		
+
 		return invMaker.getInv();
 	}
 }

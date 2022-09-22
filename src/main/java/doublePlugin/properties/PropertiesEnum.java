@@ -6,13 +6,13 @@ public enum PropertiesEnum {
 	DROP(),
 	PLACE(),
 	BREAK(),
-	ATKSPEED(),
+	ATK_SPEED(),
 	ENCHANT(),
 	SEX(),
 	HUNGRY(),
-	FALLDAMAGE(),
+	FALL_DAMAGE(),
 	PVP(),
-	
+
 	START_ITEM(),
 	BAN_ITEM_REGISTER(),
 	BAN_ITEM_SYSTEM();

@@ -26,56 +26,56 @@ public class ModifyCommand {
         String value = args[3];
         InfoMaps infoMaps;
         if(target.equals(CommandNameList.SERVER)) {
-        	infoMaps = ServerInfoMaps.getServerInfoMaps();
+            infoMaps = ServerInfoMaps.getServerInfoMaps();
         } else {
-        	
-        	NewPlayer player = NewPlayer.getNewPlayerByName(target);
-        	if(player == null) {
-        		sender.sendMessage(MessageList.ERROR_NOT_PLAYER);
-        		return;
-        	}
-        	infoMaps = player.getPlayerInfoMaps();
+
+            NewPlayer player = NewPlayer.getNewPlayerByName(target);
+            if(player == null) {
+                sender.sendMessage(MessageList.ERROR_NOT_PLAYER);
+                return;
+            }
+            infoMaps = player.getPlayerInfoMaps();
         }
         modifyInfoMaps(sender, infoMaps, type, key, value);
     }
-    
+
     private void modifyInfoMaps(NewPlayer sender, InfoMaps infoMaps, String type, String key, String value) {
-    	try{
+        try{
             switch(type) {
                 case CommandNameList.DOUBLE :
-                	infoMaps.setDoubleValue(key, Double.valueOf(value)); 
-                break;
+                    infoMaps.setDoubleValue(key, Double.valueOf(value));
+                    break;
                 case CommandNameList.INTEGER :
-                	infoMaps.setIntegerValue(key, Integer.valueOf(value));
-                break;
+                    infoMaps.setIntegerValue(key, Integer.valueOf(value));
+                    break;
                 case CommandNameList.ITEMSTACK :
                     ItemStack modfiyItem = sender.getItemInHand();
                     infoMaps.setItemStackValue(key, modfiyItem == null ? new ItemStack(Material.AIR) : new ItemBuilder(modfiyItem.clone()).setAmount(Integer.valueOf(value)).make());
-                break;
+                    break;
                 case CommandNameList.LONG :
-                	infoMaps.setLongValue(key, Long.valueOf(value));
-                break;
+                    infoMaps.setLongValue(key, Long.valueOf(value));
+                    break;
                 case CommandNameList.STRING :
-                	infoMaps.setStringValue(key, value);
-                break;
+                    infoMaps.setStringValue(key, value);
+                    break;
                 case CommandNameList.BOOLEAN :
-                	infoMaps.setBooleanValue(key, Boolean.valueOf(value));
-                break;
+                    infoMaps.setBooleanValue(key, Boolean.valueOf(value));
+                    break;
                 case CommandNameList.LOCATION :
-                	infoMaps.setLocationValue(key, sender.getLocation());
-                break;
+                    infoMaps.setLocationValue(key, sender.getLocation());
+                    break;
                 case CommandNameList.INVENTORY :
-                break;
+                    break;
                 default :
                     sender.sendMessage(MessageList.ERROR_DATA_TYPE);
-                return;
+                    return;
             }
         } catch(ClassCastException e) {
             sender.sendMessage(MessageList.ERROR_CLASS_CAST);
             return;
         }
-    	
-    	DoublePlugin.sendLog(sender.getUniqueIdtoString() + " useCommand /modify " + infoMaps.getFileLoc() + "." + type + " " + key + " " + value);
-    	sender.sendMessage(MessageList.COMPLETE_MODIFY);
+
+        DoublePlugin.sendLog(sender.getUniqueIdtoString() + " useCommand /modify " + infoMaps.getFileLoc() + "." + type + " " + key + " " + value);
+        sender.sendMessage(MessageList.COMPLETE_MODIFY);
     }
 }

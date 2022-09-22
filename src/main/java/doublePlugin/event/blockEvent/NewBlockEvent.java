@@ -15,27 +15,25 @@ public class NewBlockEvent {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		Material material = event.getBlock().getType();
 		if(BanItem.checkBanItem(material)) {
 			if(BanItem.getBanitemInfo(material).getAllow(BanItemInfoEnum.PLACE)) {
 				event.setCancelled(true);
-				return;
 			}
 		}
 	}
-	
+
 	public void newBlockBreakEvent(BlockBreakEvent event) {
 		if(!ServerProperties.get(PropertiesEnum.BREAK)) {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		Material material = event.getBlock().getType();
 		if(BanItem.checkBanItem(material)) {
 			if(BanItem.getBanitemInfo(material).getAllow(BanItemInfoEnum.BREAK)) {
 				event.setCancelled(true);
-				return;
 			}
 		}
 	}

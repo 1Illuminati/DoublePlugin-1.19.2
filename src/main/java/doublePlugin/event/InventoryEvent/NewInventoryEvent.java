@@ -16,74 +16,76 @@ import doublePlugin.item.ban.BanItemInfo.BanItemInfoEnum;
 import doublePlugin.properties.PropertiesEnum;
 import doublePlugin.properties.ServerProperties;
 
+import java.util.Objects;
+
 public class NewInventoryEvent {
-	
-    public void newInventoryClickEvent(InventoryClickEvent event) {
-    	InventoryManager inventoryAdmin = InventoryManager.getInventoryEvent(event.getView());
-    	boolean check = this.checkBanItem(event.getCurrentItem(), inventoryAdmin);
-    	
-    	if(check) {
-    		event.setCancelled(true);
-    		return;
-    	}
-    	
-        if(inventoryAdmin != null){
-            inventoryAdmin.click(event);
-        }
-    }
 
-    public void newInventoryCloseEvent(InventoryCloseEvent event) {
-    	InventoryView invView = event.getView();
-        InventoryManager inventoryAdmin = InventoryManager.getInventoryEvent(invView);
-        if(inventoryAdmin != null){
-            inventoryAdmin.close(event);
-        }
-    }
+	public void newInventoryClickEvent(InventoryClickEvent event) {
+		InventoryManager inventoryAdmin = InventoryManager.getInventoryEvent(event.getView());
+		boolean check = this.checkBanItem(event.getCurrentItem(), inventoryAdmin);
 
-    public void newInventoryOpenEvent(InventoryOpenEvent event) {
-    	
-    	if(!ServerProperties.get(PropertiesEnum.ENCHANT)) {
-        	InventoryType invType = event.getInventory().getType();
-        	if(invType == InventoryType.ANVIL || invType == InventoryType.ENCHANTING) {
-        		event.setCancelled(true);
-        		return;
-        	}
-        }
-    	
-        InventoryManager inventoryAdmin = InventoryManager.getInventoryEvent(event.getView()); 
-        if(inventoryAdmin != null){
-            inventoryAdmin.open(event);
-        }
-    }  
-    
-    public void newCraftItemEvent(CraftItemEvent event) {
-    	Material material = event.getCurrentItem().getType();
+		if(check) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if(inventoryAdmin != null){
+			inventoryAdmin.click(event);
+		}
+	}
+
+	public void newInventoryCloseEvent(InventoryCloseEvent event) {
+		InventoryView invView = event.getView();
+		InventoryManager inventoryAdmin = InventoryManager.getInventoryEvent(invView);
+		if(inventoryAdmin != null){
+			DoublePlugin.sendLog("InventoryCloseEvent : " + invView.getTitle());
+			inventoryAdmin.close(event);
+		}
+	}
+
+	public void newInventoryOpenEvent(InventoryOpenEvent event) {
+
+		if(!ServerProperties.get(PropertiesEnum.ENCHANT)) {
+			InventoryType invType = event.getInventory().getType();
+			if(invType == InventoryType.ANVIL || invType == InventoryType.ENCHANTING) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+
+		InventoryManager inventoryAdmin = InventoryManager.getInventoryEvent(event.getView());
+		if(inventoryAdmin != null){
+			inventoryAdmin.open(event);
+		}
+	}
+
+	public void newCraftItemEvent(CraftItemEvent event) {
+		Material material = Objects.requireNonNull(event.getCurrentItem()).getType();
 		if(BanItem.checkBanItem(material)) {
 			boolean check = BanItem.getBanitemInfo(material).getAllow(BanItemInfoEnum.CRAFT);
-			
-	    	if(check) {
-	    		event.setCancelled(true);
-	    		return;
-	    	}
-    	}
-    }
-    
-    private boolean checkBanItem(ItemStack itemStack, InventoryManager... inventoryAdmins) {
-    	if(itemStack == null) {
-    		return false;
-    	}
-    	
-    	for(InventoryManager inventoryAdmin : inventoryAdmins) {
-    		if(inventoryAdmin != null) {
-    			if(inventoryAdmin.getCode().startsWith(DoublePlugin.pluginName)) {
-    				return false;
-    			}
-    		}
-    	}
-    	Material material = itemStack.getType();
+
+			if(check) {
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	private boolean checkBanItem(ItemStack itemStack, InventoryManager... inventoryAdmins) {
+		if(itemStack == null) {
+			return false;
+		}
+
+		for(InventoryManager inventoryAdmin : inventoryAdmins) {
+			if(inventoryAdmin != null) {
+				if(inventoryAdmin.getCode().startsWith(DoublePlugin.pluginName)) {
+					return false;
+				}
+			}
+		}
+		Material material = itemStack.getType();
 		if(BanItem.checkBanItem(material)) {
 			return BanItem.getBanitemInfo(material).getAllow(BanItemInfoEnum.INV);
 		}
 		return false;
-    }
+	}
 }

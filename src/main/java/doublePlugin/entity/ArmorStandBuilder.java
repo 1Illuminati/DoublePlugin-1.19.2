@@ -256,7 +256,7 @@ public class ArmorStandBuilder {
 		armorStand.teleport(arg0);
 		return this;
 	}
-	
+
 	public ArmorStand make() {
 		return this.armorStand;
 	}

@@ -15,22 +15,22 @@ public class NewEntityEvent {
             event.setCancelled(true);
         }
     }
-    
+
     public void newEntityBreedEvent(EntityBreedEvent event) {
-    	boolean check = ServerProperties.get(PropertiesEnum.SEX);
+        boolean check = ServerProperties.get(PropertiesEnum.SEX);
 
         if(!check) {
             event.setCancelled(true);
         }
     }
-    
+
     public void newFoodLevelChangeEvent(FoodLevelChangeEvent event) {
-    	boolean check = ServerProperties.get(PropertiesEnum.HUNGRY);
+        boolean check = ServerProperties.get(PropertiesEnum.HUNGRY);
 
         if(!check) {
-        	if(event.getFoodLevel() < 20) {
-        		event.setFoodLevel(20);
-        	}
+            if(event.getFoodLevel() < 20) {
+                event.setFoodLevel(20);
+            }
         }
     }
 }

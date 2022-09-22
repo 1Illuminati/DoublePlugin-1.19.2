@@ -11,9 +11,9 @@ import org.bukkit.inventory.MerchantRecipe;
 import doublePlugin.entity.player.NewPlayer;
 
 public class MerchantInventory {
-    private HashMap<String, MerchantRecipe> merchantRecipeMap = new HashMap<>();
-	private Merchant merchant;
-	
+	private final HashMap<String, MerchantRecipe> merchantRecipeMap = new HashMap<>();
+	private final Merchant merchant;
+
 	public MerchantInventory(String name) {
 		merchant = Bukkit.createMerchant(name);
 	}
@@ -21,7 +21,7 @@ public class MerchantInventory {
 	public void setMerchantRecipe(String tradeName, ItemStack resultItem, int tradeNum) {
 		setMerchantRecipe(tradeName, resultItem, 1, tradeNum);
 	}
-	
+
 	public void setMerchantRecipe(String tradeName, ItemStack resultItem, int itemAmount, int tradeNum) {
 		ItemStack newResultItem = resultItem.clone();
 		newResultItem.setAmount(itemAmount);
@@ -32,16 +32,16 @@ public class MerchantInventory {
 	public void addIngredient(String tradeName, ItemStack tradeItem) {
 		addIngredient(tradeName, tradeItem, 1);
 	}
-	
+
 	public void addIngredient(String tradeName, ItemStack tradeItem, int itemAmount) {
 		ItemStack newTradeItem = tradeItem.clone();
 		newTradeItem.setAmount(itemAmount);
 		merchantRecipeMap.get(tradeName).addIngredient(newTradeItem);
 	}
-	
+
 	public void openMerchantInventory(NewPlayer p) {
 		merchant.setRecipes(getMapToList());
-		
+
 		p.openMerchant(merchant, true);
 	}
 

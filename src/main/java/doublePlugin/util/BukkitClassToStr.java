@@ -1,9 +1,9 @@
 package doublePlugin.util;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -68,36 +68,34 @@ public class BukkitClassToStr {
 
 		return null;
 	}
-	
+
 	public String inventoryToString(Inventory inventory) {
 		StringBuilder result = new StringBuilder(inventory.getType().name()).append(SERIALIZER_STR).append(inventory.getSize());
-        for (int i = 0; i < inventory.getSize(); i++) {
-            ItemStack is = inventory.getItem(i);
-            String itemStackStr = bukkitObjOut(is);
-            result.append(SERIALIZER_STR).append(itemStackStr);
-        }
-        
-        return result.toString();
+		for (int i = 0; i < inventory.getSize(); i++) {
+			ItemStack is = inventory.getItem(i);
+			String itemStackStr = bukkitObjOut(is);
+			result.append(SERIALIZER_STR).append(itemStackStr);
+		}
+
+		return result.toString();
 	}
-	
-    public Inventory stringToInventory (String invString) {
-        String[] serializedBlocks = invString.split(SERIALIZER_STR);
-        InventoryType invType = InventoryType.valueOf(serializedBlocks[0]);
-        int invSize = Integer.valueOf(serializedBlocks[1]);
-        Inventory deserializedInventory;
-        
-        switch(invType) {
-        case CHEST : 
-        	deserializedInventory = Bukkit.createInventory(null, invSize);
-        break;
-        default :
-        	deserializedInventory = Bukkit.getServer().createInventory(null, invType);
-        }
-       
-        for (int i = 2; i < serializedBlocks.length; i++) {
-            deserializedInventory.setItem(i - 2, bukkitObjIn(invString, ItemStack.class));
-        }
-       
-        return deserializedInventory;
-    }
+
+	public Inventory stringToInventory (String invString) {
+		String[] serializedBlocks = invString.split(SERIALIZER_STR);
+		InventoryType invType = InventoryType.valueOf(serializedBlocks[0]);
+		int invSize = Integer.parseInt(serializedBlocks[1]);
+		Inventory deserializedInventory;
+
+		if (invType == InventoryType.CHEST)  {
+			deserializedInventory = Bukkit.createInventory(null, invSize);
+		} else {
+			deserializedInventory = Bukkit.getServer().createInventory(null, invType);
+		}
+
+		for (int i = 2; i < serializedBlocks.length; i++) {
+			deserializedInventory.setItem(i - 2, bukkitObjIn(invString, ItemStack.class));
+		}
+
+		return deserializedInventory;
+	}
 }
