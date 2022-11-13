@@ -63,8 +63,6 @@ public class BanItemInfoInv extends InventoryManager {
 
 	@Override
 	public void close(InventoryCloseEvent event) {
-		NewPlayer player = NewPlayer.getNewPlayer((Player) event.getPlayer());
-		player.openInvNotClose(PropertiesInv.getInventory(player));
 	}
 
 	@Override

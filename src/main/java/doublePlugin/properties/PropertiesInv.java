@@ -67,7 +67,6 @@ public class PropertiesInv extends InventoryManager {
 
 	@Override
 	public void close(InventoryCloseEvent event) {
-		Bukkit.broadcastMessage("TEST");
 	}
 
 	@Override

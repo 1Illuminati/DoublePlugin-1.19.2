@@ -1,5 +1,6 @@
 package doublePlugin.util.map;
 
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,12 +9,13 @@ public class NotNullStrMap<T> extends HashMap<String, T> {
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = 1L;
 	private T normalValue = null;
 	
 	public static <T> NotNullStrMap<T> getMap(Map<String, T> map) {
 		NotNullStrMap<T> notNullStrMap = new NotNullStrMap<T>();
-		for(String key : map.keySet()) {
+		for (String key : map.keySet()) {
 			notNullStrMap.put(key, (T) map.get(key));
 		}
 		

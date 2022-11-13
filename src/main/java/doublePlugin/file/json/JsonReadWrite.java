@@ -17,7 +17,7 @@ import doublePlugin.util.map.NotNullStrMap;
 public class JsonReadWrite {
 
     @SuppressWarnings("unchecked")
-    public <T> NotNullStrMap<T> jsonRead(String fileLoc, Class<T> clazz) throws IOException{
+    public <T> NotNullStrMap<T> jsonRead(String fileLoc, Class<T> clazz) throws IOException {
         JSONParser parser = new JSONParser();
         String loc = "plugins/doublePlugin/" + fileLoc + ".json";
         Reader reader = new FileReader(loc);

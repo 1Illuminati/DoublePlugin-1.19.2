@@ -8,7 +8,7 @@ public class BanItemInfo {
 	private static final String serStr = ";;";
 	private static final String cross = "::";
 	private final Material material;
-	private HashMap<BanItemInfoEnum, Boolean> infoMap = new HashMap<>();
+	private final HashMap<BanItemInfoEnum, Boolean> infoMap = new HashMap<>();
 
 	public static BanItemInfo strToInfo(String str) {
 		String[] args = str.split(serStr);
@@ -35,6 +35,10 @@ public class BanItemInfo {
 	}
 
 	public boolean getAllow(BanItemInfoEnum infoEnum) {
+		if (!infoMap.containsKey(infoEnum)) {
+			infoMap.put(infoEnum, true);
+		}
+
 		return infoMap.get(infoEnum);
 	}
 

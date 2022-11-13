@@ -57,12 +57,11 @@ public class BanItemMoreInfoInv extends InventoryManager {
 		BanItemInfoEnum infoEnum = BanItemInfoEnum.valueOf(display);
 
 		info.setAllow(infoEnum, !info.getAllow(infoEnum));
+		player.openInventory(getInv(player));
 	}
 
 	@Override
 	public void close(InventoryCloseEvent event) {
-		NewPlayer player = NewPlayer.getNewPlayer((Player) event.getPlayer());
-		player.openInvNotClose(BanItemInfoInv.getInventory(player));
 	}
 
 	@Override
@@ -81,7 +80,7 @@ public class BanItemMoreInfoInv extends InventoryManager {
 		invMaker.setItem(4, temp(info, BanItemInfoEnum.PLACE, "해당 블럭 설치를 모두 취소시킵니다", Material.DIRT));
 		invMaker.setItem(6, temp(info, BanItemInfoEnum.BREAK, "해당 블럭 파괴를 모두 취소시킵니다", Material.STONE_PICKAXE));
 		invMaker.setItem(8, temp(info, BanItemInfoEnum.CLICK, "해당 아이템 좌,우 클릭을 모두 취소시킵니다", Material.BARRIER));
-		invMaker.setItem(8, temp(info, BanItemInfoEnum.DROP, "해당 아이템의 드랍을 전부 취소시킵니다", Material.STONE));
+		invMaker.setItem(9, temp(info, BanItemInfoEnum.DROP, "해당 아이템의 드랍을 전부 취소시킵니다", Material.STONE));
 
 		return invMaker.getInv();
 	}

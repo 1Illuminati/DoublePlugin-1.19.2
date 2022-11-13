@@ -46,9 +46,6 @@ public class StartItemInv extends InventoryManager {
 				startItemList.add(item);
 			}
 		}
-
-		NewPlayer player = NewPlayer.getNewPlayer((Player) event.getPlayer());
-		player.openInvNotClose(PropertiesInv.getInventory(player));
 	}
 
 	@Override

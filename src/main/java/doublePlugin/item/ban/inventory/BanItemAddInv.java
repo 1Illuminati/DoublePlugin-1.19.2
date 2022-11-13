@@ -45,9 +45,6 @@ public class BanItemAddInv extends InventoryManager {
 				}
 			}
 		}
-
-		NewPlayer player = NewPlayer.getNewPlayer((Player) event.getPlayer());
-		player.openInvNotClose(PropertiesInv.getInventory(player));
 	}
 
 	@Override

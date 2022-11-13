@@ -51,6 +51,7 @@ public class NewPlayerActEvent {
 		ItemEvent itemEvent = ItemEvent.getItemEvent(itemStack);
 		if(itemEvent != null) {
 			boolean eventCancelled = false;
+			itemEvent.setEvent(event);
 			switch(action) {
 				case LEFT_CLICK_AIR:
 				case LEFT_CLICK_BLOCK:
@@ -92,6 +93,7 @@ public class NewPlayerActEvent {
 		ItemEvent itemEvent = ItemEvent.getItemEvent(itemStack);
 		if(itemEvent != null) {
 			boolean eventCancelled;
+			itemEvent.setEvent(event);
 			if(player.isSneaking()) {
 				eventCancelled = itemEvent.shiftSwapHand(player);
 			} else {
@@ -113,14 +115,19 @@ public class NewPlayerActEvent {
 			return;
 		}
 
-		if(BanItem.getBanitemInfo(itemStack.getType()).getAllow(BanItemInfoEnum.DROP)) {
-			event.setCancelled(true);
-			return;
+		Material material = itemStack.getType();
+		if(BanItem.checkBanItem(material))  {
+			if(BanItem.getBanitemInfo(material).getAllow(BanItemInfoEnum.DROP)) {
+				event.setCancelled(true);
+				return;
+			}
 		}
+
 
 		ItemEvent itemEvent = ItemEvent.getItemEvent(itemStack);
 		if(itemEvent != null) {
 			boolean eventCancelled;
+			itemEvent.setEvent(event);
 			if(player.isSneaking()) {
 				eventCancelled = itemEvent.dropItem(player);
 			} else {

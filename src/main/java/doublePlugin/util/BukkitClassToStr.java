@@ -52,9 +52,6 @@ public class BukkitClassToStr {
 	}
 
 	public <T> String bukkitObjOut(Object bukkitClass) {
-		if(bukkitClass.getClass() == Inventory.class) {
-			return inventoryToString((Inventory) bukkitClass);
-		}
 
 		try {
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

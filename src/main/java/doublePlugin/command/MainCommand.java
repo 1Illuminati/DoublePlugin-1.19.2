@@ -34,13 +34,16 @@ public class MainCommand implements CommandExecutor {
 			case CommandNameList.SKULL -> skullCommand(args, sender);
 			case CommandNameList.PROPERTIES -> propertiesCommand(sender);
 			case CommandNameList.START_ITEM -> startItemCommand(sender);
-			case CommandNameList.TEST -> test(sender, args[0]);
+			case CommandNameList.TEST -> test(sender);
 		}
 		return true;
 	}
 
-	private void test(NewPlayer sender, String uuid) {
-
+	private void test(NewPlayer sender) {
+		ItemStack itemStack = sender.getItemInHand();
+		for (String key : itemStack.serialize().keySet()) {
+			Bukkit.broadcastMessage(key + " : " + itemStack.serialize().get(key));
+		}
 	}
 
 	private void startItemCommand(NewPlayer sender) {
